@@ -1,0 +1,9 @@
+assets
+*.pyc
+__pycache__
+dist/
+MANIFEST
+*.log
+*.egg-info
+
+

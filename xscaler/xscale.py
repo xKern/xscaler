@@ -16,11 +16,13 @@ class XScale():
     def __init__(self,
                  input_file_path,
                  output_directory='output',
+                 frame_output_directory='frame_output',
                  video_output_format='mp4',
                  frame_extraction_format='jpg'):
 
         self.__input_file_path = input_file_path
         self.__output_directory = output_directory
+        self.__frame_output_directory = frame_output_directory
 
         self.video_output_format = video_output_format
         self.frame_extraction_format = frame_extraction_format
@@ -30,6 +32,9 @@ class XScale():
 
         self.full_input_path = self.probe['format']['filename']
         self.filename = os.path.basename(self.probe['format']['filename'])
+
+        self.output_file_path = None
+        self.output_probe = None
 
         self.video_streams = [
             stream for stream in self.probe['streams']
@@ -130,6 +135,7 @@ class XScale():
         output_path = (
             f'{self.__output_directory}/{filename}.{extsn}'
         )
+        self.output_file_path = output_path
         output = ffmpeg.output(*streams,
                                output_path,
                                **args)
@@ -140,9 +146,13 @@ class XScale():
             output.run(overwrite_output=True, quiet=False)
             logger.info(f"{self.filename} processed")
             self.__process_frame()
+            self.__get_output_probe()
         except ffmpeg.Error as e:
             logger.error(f'Processing {self.filename} failed due to')
             logger.error(e)
+
+    def __get_output_probe(self):
+        self.output_probe = ffmpeg.probe(self.output_file_path)
 
     def __process_frame(self):
         vid_extsn = self.video_output_format
@@ -158,11 +168,12 @@ class XScale():
             success, image = vidcap.read()
             thumbs.append(image)
 
-        # pick a frake
+        # pick a frame
         logger.info("All frames extracted")
         frame = random.choice(thumbs)
-        cv2.imwrite(f'./{self.__output_directory}/{filename}_thumb.{extsn}',
-                    frame)
+        output_path = (f'./{self.__frame_output_directory}/{filename}_'
+                       f'thumb.{extsn}')
+        cv2.imwrite(output_path, frame)
         logger.info("Extracted and saved single frame.")
 
     def __debug_info(self, args):

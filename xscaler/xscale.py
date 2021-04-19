@@ -36,6 +36,10 @@ class XScale():
 
         self.output_file_path = None
         self.output_probe = None
+        self.output_thumb_path = None
+        self.output_thumb_probe = None
+        self.sha1 = None
+        self.thumb_sha1 = None
 
         self.video_streams = [
             stream for stream in self.probe['streams']
@@ -155,6 +159,7 @@ class XScale():
 
     def __get_output_probe(self):
         self.output_probe = ffmpeg.probe(self.output_file_path)
+        self.output_thumb_probe = ffmpeg.probe(self.output_thumb_path)
 
     def __process_frame(self):
         vid_extsn = self.video_output_format
@@ -176,18 +181,23 @@ class XScale():
         output_path = (f'./{self.__frame_output_directory}/{filename}_'
                        f'thumb.{extsn}')
         cv2.imwrite(output_path, frame)
+        self.output_thumb_path = output_path
         logger.info("Extracted and saved single frame.")
 
     def __generate_sha1(self):
+        self.sha1 = self.__generate_checksum(self.output_file_path)
+        self.thumb_sha1 = self.__generate_checksum(self.output_thumb_path)
+
+    def __generate_checksum(self, path):
         buff_size = 1024
         sha1 = hashlib.sha1()
-        with open(self.output_file_path, 'rb') as f:
+        with open(path, 'rb') as f:
             while True:
                 data = f.read(buff_size)
                 if not data:
                     break
                 sha1.update(data)
-        self.sha1 = sha1.hexdigest()
+        return sha1.hexdigest()
 
     def __debug_info(self, args):
         num_streams_vid = num_streams_aud = 0

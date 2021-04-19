@@ -5,6 +5,7 @@ import logzero
 from logzero import logger
 import cv2
 import random
+import hashlib
 
 logzero.logfile('xscaler_output.log')
 
@@ -147,6 +148,7 @@ class XScale():
             logger.info(f"{self.filename} processed")
             self.__process_frame()
             self.__get_output_probe()
+            self.__generate_sha1()
         except ffmpeg.Error as e:
             logger.error(f'Processing {self.filename} failed due to')
             logger.error(e)
@@ -175,6 +177,17 @@ class XScale():
                        f'thumb.{extsn}')
         cv2.imwrite(output_path, frame)
         logger.info("Extracted and saved single frame.")
+
+    def __generate_sha1(self):
+        buff_size = 1024
+        sha1 = hashlib.sha1()
+        with open(self.output_file_path, 'rb') as f:
+            while True:
+                data = f.read(buff_size)
+                if not data:
+                    break
+                sha1.update(data)
+        self.sha1 = sha1.hexdigest()
 
     def __debug_info(self, args):
         num_streams_vid = num_streams_aud = 0

@@ -161,29 +161,6 @@ class XScale():
         self.output_probe = ffmpeg.probe(self.output_file_path)
         self.output_thumb_probe = ffmpeg.probe(self.output_thumb_path)
 
-    # def __process_frame(self):
-    #     vid_extsn = self.video_output_format
-    #     extsn = self.frame_extraction_format
-    #     filename = os.path.splitext(self.filename)[0]
-    #     # Extract frame
-    #     vidcap = cv2.VideoCapture(
-    #         f'./{self.__output_directory}/{filename}.{vid_extsn}')
-    #     success, image = vidcap.read()
-    #     success = True
-    #     thumbs = []
-    #     while success:
-    #         success, image = vidcap.read()
-    #         thumbs.append(image)
-
-    #     # pick a frame
-    #     logger.info("All frames extracted")
-    #     frame = random.choice(thumbs)
-    #     output_path = (f'./{self.__frame_output_directory}/{filename}_'
-    #                    f'thumb.{extsn}')
-    #     cv2.imwrite(output_path, frame)
-        # self.output_thumb_path = output_path
-        # logger.info("Extracted and saved single frame.")
-
     def __process_frame(self):
         vid_extsn = self.video_output_format
         extsn = self.frame_extraction_format
@@ -198,6 +175,7 @@ class XScale():
             .output(output_path, vframes=1)
             .run()
         )
+        self.output_thumb_path = output_path
 
     def __generate_sha1(self):
         self.sha1 = self.__generate_checksum(self.output_file_path)

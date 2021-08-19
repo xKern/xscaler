@@ -3,7 +3,6 @@ import os
 import ffmpeg
 import logzero
 from logzero import logger
-import cv2
 import random
 import hashlib
 
@@ -19,7 +18,7 @@ class XScale():
                  output_directory='output',
                  frame_output_directory='frame_output',
                  video_output_format='mp4',
-                 frame_extraction_format='jpg'):
+                 frame_extraction_format='jpeg'):
 
         self.__input_file_path = input_file_path
         self.__output_directory = output_directory

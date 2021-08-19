@@ -3,7 +3,6 @@ import os
 import ffmpeg
 import logzero
 from logzero import logger
-import random
 import hashlib
 
 logzero.logfile('xscaler_output.log')
@@ -18,8 +17,10 @@ class XScale():
                  output_directory='output',
                  frame_output_directory='frame_output',
                  video_output_format='mp4',
-                 frame_extraction_format='jpeg'):
+                 frame_extraction_format='jpeg',
+                 quiet=False):
 
+        self.quiet = quiet
         self.__input_file_path = input_file_path
         self.__output_directory = output_directory
         self.__frame_output_directory = frame_output_directory
@@ -147,7 +148,7 @@ class XScale():
         self.__debug_info(output.get_args())
         print(''.join(output.get_args()))
         try:
-            output.run(overwrite_output=True, quiet=False)
+            output.run(overwrite_output=True, quiet=self.quiet)
             logger.info(f"{self.filename} processed")
             self.__process_frame()
             self.__get_output_probe()

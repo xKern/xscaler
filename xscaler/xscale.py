@@ -167,11 +167,11 @@ class XScale():
         filename = os.path.splitext(self.filename)[0]
         path = f'{self.__output_directory}/{filename}.{vid_extsn}'
         output_path = (f'{self.__frame_output_directory}/'
-                       f'{filename}_thumb.{extsn}')
+                       f'{filename}_frame.{extsn}')
 
         (
             ffmpeg.input(path)
-            .filter('scale', 400,  -1)
+            .filter('scale', 854, 480)
             .output(output_path, vframes=1)
             .run()
         )

@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
       name='xscaler',         # How you named your package folder (MyLib)
       packages=['xscaler'],   # Chose the same as "name"
-      version='0.1.4',
+      version='0.1.5',
       license='MIT',
       description=('A simple python utility based on ffmpeg '
                    'and opencv for in house use'),

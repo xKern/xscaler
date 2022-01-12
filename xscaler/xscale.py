@@ -3,6 +3,7 @@ import os
 import ffmpeg
 import logzero
 from logzero import logger
+import random
 import hashlib
 
 logzero.logfile('xscaler_output.log')
@@ -165,6 +166,8 @@ class XScale():
         vid_extsn = self.video_output_format
         extsn = self.frame_extraction_format
         filename = os.path.splitext(self.filename)[0]
+        total_duration = int(float(self.probe['streams'][0]['duration']))
+        frame_time = random.randrange(1, total_duration)
         path = f'{self.__output_directory}/{filename}.{vid_extsn}'
         output_path = (f'{self.__frame_output_directory}/'
                        f'{filename}_frame.{extsn}')
@@ -172,7 +175,7 @@ class XScale():
         (
             ffmpeg.input(path)
             .filter('scale', 854, 480)
-            .output(output_path, vframes=1)
+            .output(output_path, vframes=1, ss=frame_time)
             .run()
         )
         self.output_thumb_path = output_path

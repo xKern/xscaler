@@ -1,6 +1,9 @@
-ffmpeg-python==0.2.0
+colorful==0.5.4
+ffmpeg-python==0.1.18
 ffprobe-python==1.0.3
 future==0.18.2
 logzero==1.7.0
 numpy==1.22.0
 opencv-python==4.5.5.62
+prettyprinter==0.18.0
+Pygments==2.11.2

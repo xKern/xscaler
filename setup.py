@@ -12,7 +12,7 @@ setup(
       download_url='https://github.com/xKern/xscaler/archive/refs/tags/0.1.3.tar.gz',
       keywords=['XKERN', 'XSCALER', 'PYTHON', 'FFMPEG', 'OPENCV'],
       # I explain this later on
-      install_requires=['ffmpeg-python', 'opencv-python', 'logzero'],
+      install_requires=['ffmpeg-python==0.1.18', 'opencv-python', 'logzero'],
       classifiers=[
             'Development Status :: 3 - Alpha',
             'Intended Audience :: Developers',
